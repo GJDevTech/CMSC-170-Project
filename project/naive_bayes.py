@@ -117,9 +117,42 @@ def calculate_priors(training_rows):
 
 
 def calculate_likelihoods(training_rows, feature_names, class_counts):
-    # code here
-    pass
 
+    # 1. init. every possible combination of class, feature, and category to 0
+    counts = {}  
+    for class_label in CLASSES:          # B or M
+        counts[class_label] = {}
+
+        for feature in feature_names:    # for every feature 
+            counts[class_label][feature] = {}
+
+            for category in CATEGORIES:  # for every category
+                counts[class_label][feature][category] = 0
+
+    # 2. count occurrences in training data
+    for record in training_rows:                         # for each categorized training record
+        class_label = record["diagnosis"]                # read diagnosis
+
+        for feature in feature_names:                    # for every feature 
+            category = record[feature]                   # read category of that feature
+            counts[class_label][feature][category] += 1  # update matching count
+
+    # 3. calculate likelihoods
+    likelihoods = {}
+    for class_label in CLASSES:                   # for each class
+        class_count = class_counts[class_label]   # get number of training records belonging to that class
+        likelihoods[class_label] = {}
+
+        for feature in feature_names:             # for every feature
+            likelihoods[class_label][feature] = {}
+
+            for category in CATEGORIES:           # for each category
+                
+                # apply P(category|class) with Laplace smoothing a = 1
+                likelihoods[class_label][feature][category] = (counts[class_label][feature][category] + 1 ) / (class_count + 3)
+
+    # 4. return likelihoods
+    return likelihoods
 
 def predict_one(record, feature_names, priors, likelihoods):
     # code here
