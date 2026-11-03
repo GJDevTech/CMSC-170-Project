@@ -94,7 +94,7 @@ def calculate_priors(training_rows):
         elif diagnosis == "B":
             b+=1
         else:
-            print("Error reading record")
+            raise ValueError("Invalid diagnosis label")
 
     
     # 2. for each class, calculate priors
