@@ -75,9 +75,45 @@ def categorize_dataset(rows, feature_names, boundaries):
 # PART B: NB CLASSIFIER
 # Assigned to: Jericho
 
+"""
+example
+training_rows = [
+    {
+        "diagnosis": "B",
+        "radius_mean": 12.5,
+        "texture_mean": 18.2,
+        # ... 28 more features
+    },
+"""
 def calculate_priors(training_rows):
-    # code here
-    pass
+
+    # 1. count records under each class
+    b = 0
+    m = 0
+
+    for record in training_rows:        # for each training record
+        diagnosis = record["diagnosis"]   # read diagnosis
+
+        # check if it's B or M, increment accordingly
+        if diagnosis == "M":
+            m+=1
+        elif diagnosis == "B":
+            b+=1
+        else:
+            print("Error reading record")
+
+    
+    # 2. for each class, calculate priors
+    priors = {}
+    total = len(training_rows)
+
+    priors["B"] = b / total
+    priors["M"] = m / total
+
+    # 3. return priors and class counts as dict
+    class_counts = {"B": b, "M": m}
+
+    return priors, class_counts
 
 
 def calculate_likelihoods(training_rows, feature_names, class_counts):
