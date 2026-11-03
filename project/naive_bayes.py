@@ -42,6 +42,9 @@ notes
 - do not use scikit or other libraries
 """
 
+import math
+import csv
+
 # constants 
 TRAINING_FILE = "new-dataset/training.csv"
 TESTING_FILE = "new-dataset/testing.csv"
@@ -75,16 +78,7 @@ def categorize_dataset(rows, feature_names, boundaries):
 # PART B: NB CLASSIFIER
 # Assigned to: Jericho
 
-"""
-example
-training_rows = [
-    {
-        "diagnosis": "B",
-        "radius_mean": 12.5,
-        "texture_mean": 18.2,
-        # ... 28 more features
-    },
-"""
+# Calculate prior probabilities and record counts for each class
 def calculate_priors(training_rows):
 
     # 1. count records under each class
@@ -115,7 +109,7 @@ def calculate_priors(training_rows):
 
     return priors, class_counts
 
-
+# Calculate feature-category likelihoods for each class with smoothing
 def calculate_likelihoods(training_rows, feature_names, class_counts):
 
     # 1. init. every possible combination of class, feature, and category to 0
@@ -137,7 +131,7 @@ def calculate_likelihoods(training_rows, feature_names, class_counts):
             category = record[feature]                   # read category of that feature
             counts[class_label][feature][category] += 1  # update matching count
 
-    # 3. calculate likelihoods
+    # 3. calculate probabilities
     likelihoods = {}
     for class_label in CLASSES:                   # for each class
         class_count = class_counts[class_label]   # get number of training records belonging to that class
@@ -147,16 +141,45 @@ def calculate_likelihoods(training_rows, feature_names, class_counts):
             likelihoods[class_label][feature] = {}
 
             for category in CATEGORIES:           # for each category
-                
+
                 # apply P(category|class) with Laplace smoothing a = 1
                 likelihoods[class_label][feature][category] = (counts[class_label][feature][category] + 1 ) / (class_count + 3)
 
-    # 4. return likelihoods
+    # 4. return probabilities
     return likelihoods
 
+# Predict a record's diagnosis using NB log probability scores
 def predict_one(record, feature_names, priors, likelihoods):
-    # code here
-    pass
+
+    # 1. calculate log probability scores for each class
+    scores = {}
+    for class_label in CLASSES:         # for each class
+
+        prior = priors[class_label]     # get prior probability of that class
+        score = math.log(prior)         # get logarithm
+
+        for feature in feature_names:   # for each feature
+            category = record[feature]  # read category of this feature from current record
+            likelihood = likelihoods[class_label][feature][category]  # get likelihood
+            score += math.log(likelihood)  # get log of likelihood and add to class score
+
+        scores[class_label] = score     # store final score for this class 
+
+    # 2. compare scores, return higher score
+    if scores["B"] > scores["M"]:
+        return "B"
+    elif scores["B"] < scores["M"]:
+        return "M"
+    elif scores["B"] == scores["M"]:
+        # return class with higher prior
+        if priors["B"] > priors["M"]:
+            return "B"
+        elif priors["B"] < priors["M"]:
+            return "M"
+        elif priors["B"] == priors["M"]:
+            # if still equal, return B
+            return "B"
+    else: return None
 
 
 # PART C: EVALUATION
