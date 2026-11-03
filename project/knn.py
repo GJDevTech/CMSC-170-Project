@@ -1,4 +1,3 @@
-
 """
 !!! DO NOT REMOVE !!!
 
@@ -69,21 +68,52 @@ def scale_dataset(rows, feature_names, min_max):
 
 
 # PART B: KNN CLASSIFIER
-# Assigned to: ?
+# Assigned to: Calvin
 
+# Calculate distance between two records using Minkowski distance
 def calculate_distance(record_a, record_b, feature_names, p):
-    # code here
-    pass
+    total = 0.0
+
+    for feature in feature_names:
+        total += abs(record_a[feature] - record_b[feature]) ** p
+
+    return total ** (1 / p)
 
 
+# Find the k training records closest to the given record
 def find_nearest_neighbors(training_rows, record, feature_names, k, p):
-    # code here
-    pass
+    distances = []
+
+    # 1. calculate distance to each training record
+    for train_record in training_rows:
+        d = calculate_distance(record, train_record, feature_names, p)
+
+        # 2. maintain sorted list of k smallest distances in descending order
+        if len(distances) != k:
+            distances.append((d, train_record["diagnosis"]))
+            distances = sorted(distances, key=lambda item: item[0], reverse=True)
+        elif d < distances[0][0]:
+            distances.pop(0)
+            distances.append((d, train_record["diagnosis"]))
+            distances = sorted(distances, key=lambda item: item[0], reverse=True)
+
+    # 3. return only the diagnosis labels of the k nearest neighbors
+    return [item[1] for item in distances]
 
 
+# Predict diagnosis using majority voting from nearest neighbor labels
 def predict_one(neighbors):
-    # code here
-    pass
+    count_label = {}
+
+    # 1. count occurrences of each diagnosis among neighbors
+    for label in neighbors:
+        if label in count_label:
+            count_label[label] += 1
+        else:
+            count_label[label] = 1
+
+    # 2. return the diagnosis with the highest vote count
+    return max(count_label, key=count_label.get)
 
 
 # PART C: EVALUATION
