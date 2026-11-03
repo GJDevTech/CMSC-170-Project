@@ -36,3 +36,71 @@ notes
 - implement the algorithm and metrics from scratch
 - do not use scikit or other libraries
 """
+
+# constants
+TRAINING_FILE = "new-dataset/training.csv"
+TESTING_FILE = "new-dataset/testing.csv"
+CLASSES = ("B", "M")
+K = 5
+P = 2
+
+
+# PART A: DATA PREP
+# Assigned to: ?
+
+def load_dataset(file_path):
+    # code here
+    pass
+
+
+def calculate_min_max(training_rows, feature_names):
+    # code here
+    pass
+
+
+def scale_value(value, minimum, maximum):
+    # code here
+    pass
+
+
+def scale_dataset(rows, feature_names, min_max):
+    # code here
+    pass
+
+
+# PART B: KNN CLASSIFIER
+# Assigned to: ?
+
+def calculate_distance(record_a, record_b, feature_names, p):
+    # code here
+    pass
+
+
+def find_nearest_neighbors(training_rows, record, feature_names, k, p):
+    # code here
+    pass
+
+
+def predict_one(neighbors):
+    # code here
+    pass
+
+
+# PART C: EVALUATION
+# Assigned to: ?
+
+def evaluate_predictions(testing_rows, predictions):
+    # code here
+    pass
+
+
+# PART D: MAIN
+# Assigned to: ?
+
+def main():
+    # code here
+    pass
+
+
+if __name__ == "__main__":
+    main()
