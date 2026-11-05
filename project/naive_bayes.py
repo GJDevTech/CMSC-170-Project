@@ -186,8 +186,53 @@ def predict_one(record, feature_names, priors, likelihoods):
 # Assigned to: GJ
 
 def evaluate_predictions(testing_rows, predictions):
-    # code here
-    pass
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+
+    # Compare actual diagnosis with predicted diagnosis
+    for record, prediction in zip(testing_rows, predictions):
+
+        actual = record["diagnosis"]
+
+        # Malignant is the positive class
+        if actual == "M" and prediction == "M":
+            TP += 1
+
+        elif actual == "B" and prediction == "B":
+            TN += 1
+
+        elif actual == "B" and prediction == "M":
+            FP += 1
+
+        elif actual == "M" and prediction == "B":
+            FN += 1
+
+        else:
+            raise ValueError("Invalid diagnosis or prediction.")
+
+    # Total number of predictions
+    total = TP + TN + FP + FN
+
+    # Calculate accuracy
+    accuracy = (TP + TN) / total
+
+    # Calculate malignant recall
+    if TP + FN == 0:
+        malignant_recall = 0
+    else:
+        malignant_recall = TP / (TP + FN)
+
+    # Return all evaluation results
+    return {
+        "accuracy": accuracy,
+        "malignant_recall": malignant_recall,
+        "TP": TP,
+        "TN": TN,
+        "FP": FP,
+        "FN": FN
+    }
 
 
 # PART D: MAIN
