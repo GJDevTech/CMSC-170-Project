@@ -129,20 +129,39 @@ def encode_diagnosis(label):
 # PART B: PERCEPTRON COMPUTATION
 # Assigned to: Calvin
 
-
+# Initialize feature weights to 0.0 and bias to initial_bias 
 def initialize_parameters(feature_names, initial_bias):
-    # code here
-    pass
+    weights = {}
+
+    # 1. initialize all feature weights to 0.0
+    for feature in feature_names:
+        weights[feature] = 0.0
+
+    # 2. set initial bias (w0)
+    bias = float(initial_bias)
+
+    # 3. return weights dictionary and bias
+    return weights, bias
 
 
+# Compute activation v = sum(weight * feature_value) + bias
 def calculate_activation(record, feature_names, weights, bias):
-    # code here
-    pass
+    activation = bias
+
+    # sum weighted features: w_i * x_i
+    for feature in feature_names:
+        activation += weights[feature] * record[feature]
+
+    return activation
 
 
+# Predict class output using hard limiter 
 def predict_output(activation):
-    # code here
-    pass
+    # predict +1 if activation >= 0, otherwise -1
+    if activation >= 0:
+        return 1
+    else:
+        return -1
 
 
 # PART C: PERCEPTRON TRAINING
