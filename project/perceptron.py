@@ -122,8 +122,12 @@ def scale_dataset(rows, feature_names, min_max):
 
 
 def encode_diagnosis(label):
-    # code here
-    pass
+    if label == "M":
+        return 1
+    elif label == "B":
+        return -1
+    else:
+        raise ValueError(f"Invalid diagnosis label: {label}")
 
 
 # PART B: PERCEPTRON COMPUTATION
@@ -235,9 +239,29 @@ def train_perceptron(training_rows, feature_names, learning_rate, max_epochs, in
 
 
 def predict_dataset(testing_rows, feature_names, weights, bias):
-    # code here
-    pass
+    predictions = []
 
+    for record in testing_rows:
+        # Calculate activation using trained parameters
+        activation = calculate_activation(
+            record,
+            feature_names,
+            weights,
+            bias
+        )
+
+        # Predict +1 or -1
+        predicted_output = predict_output(activation)
+
+        # Convert prediction back to diagnosis label
+        if predicted_output == 1:
+            prediction = "M"
+        else:
+            prediction = "B"
+
+        predictions.append(prediction)
+
+    return predictions
 
 def evaluate_predictions(testing_rows, predictions):
     # predictions must line up with the testing rows
@@ -291,18 +315,85 @@ def evaluate_predictions(testing_rows, predictions):
     return results
 
 def main():
-    """
-    STEPS:
-    # 1. Load existing training and testing files.
-    # 2. Confirm both files use the same 30 input features.
-    # 3. Get scaling values from TRAINING records only.
-    # 4. Apply the same training-derived scaling to BOTH sets.
-    # 5. Train only on scaled_training.
-    # 6. Predict test labels without changing weights or bias.
-    # 7. Compare predictions against the held-out test labels.
-    # 8. Display training status and the same metrics used by KNN and NB.
-    """
-    pass
+    # 1. Load training and testing datasets
+    training_rows, training_features = load_dataset(TRAINING_FILE)
+    testing_rows, testing_features = load_dataset(TESTING_FILE)
+
+    # 2. Confirm both datasets have the same features
+    if training_features != testing_features:
+        raise ValueError("Training and testing features do not match.")
+
+    if len(training_features) != 30:
+        raise ValueError(
+            f"Expected 30 features, but found {len(training_features)}."
+        )
+
+    # 3. Calculate min and max using TRAINING data only
+    min_max = calculate_min_max(training_rows, training_features)
+
+    # 4. Scale both datasets using training min and max
+    scaled_training = scale_dataset(
+        training_rows,
+        training_features,
+        min_max
+    )
+
+    scaled_testing = scale_dataset(
+        testing_rows,
+        testing_features,
+        min_max
+    )
+
+    # 5. Train the perceptron
+    weights, bias, epochs_run, converged = train_perceptron(
+        scaled_training,
+        training_features,
+        LEARNING_RATE,
+        MAX_EPOCHS,
+        INITIAL_BIAS
+    )
+
+    # 6. Predict testing dataset
+    predictions = predict_dataset(
+        scaled_testing,
+        testing_features,
+        weights,
+        bias
+    )
+
+    # 7. Evaluate predictions
+    results = evaluate_predictions(scaled_testing, predictions)
+
+    # 8. Display training information
+    print("\n========== PERCEPTRON CLASSIFICATION ==========")
+
+    print(f"Training records: {len(training_rows)}")
+    print(f"Testing records: {len(testing_rows)}")
+    print(f"Number of features: {len(training_features)}")
+    print(f"Learning rate: {LEARNING_RATE}")
+    print(f"Initial bias: {INITIAL_BIAS}")
+    print(f"Maximum epochs: {MAX_EPOCHS}")
+    print(f"Epochs completed: {epochs_run}")
+
+    if converged:
+        print("Training status: Converged")
+    else:
+        print("Training status: Maximum epochs reached")
+
+    # 9. Display confusion matrix counts
+    print("\n--------------- CONFUSION MATRIX ---------------")
+    print(f"True Positive (TP):  {results['TP']}")
+    print(f"True Negative (TN):  {results['TN']}")
+    print(f"False Positive (FP): {results['FP']}")
+    print(f"False Negative (FN): {results['FN']}")
+
+    # 10. Display evaluation metrics
+    print("\n---------------- EVALUATION ----------------")
+    print(f"Accuracy:          {results['accuracy'] * 100:.2f}%")
+    print(f"Malignant Recall:  {results['malignant_recall'] * 100:.2f}%")
+
+    print("===============================================")
+
 
 if __name__ == "__main__":
     main()
