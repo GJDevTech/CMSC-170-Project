@@ -148,15 +148,67 @@ def predict_output(activation):
 # PART C: PERCEPTRON TRAINING
 # Assigned to: Jericho
 
-
+# Update perceptron's weights and bias using learning rule
 def update_parameters(record, feature_names, weights, bias, desired_output, predicted_output, learning_rate):
-    # code here
-    pass
+    
+    # 1. update weights
+    error = desired_output - predicted_output          # calculate error
+    for feature in feature_names:                      # for every feature
+        scaled_value = record[feature]                 # read that feature's scaled value from record
+        change = learning_rate * error * scaled_value  # calculate change
+        weights[feature] += change                     # add change to feature's weight
 
+    # 2. update bias
+    bias_change = learning_rate*error  # calculate bias change
+    bias += bias_change                # add bias change to bias
 
+    # 3. return parameters
+    return weights, bias               
+
+# Train perceptron until convergence or we reach max number of epochs
 def train_perceptron(training_rows, feature_names, learning_rate, max_epochs, initial_bias):
-    # code here
-    pass
+
+    # check if max_epochs is at least 1 and learning_rate is within (0, 1]
+    if max_epochs < 1 or not (learning_rate > 0 and learning_rate <= 1):
+        raise ValueError(f"max_epochs {max_epochs} should at least be 1 and 0 < {learning_rate} <= 1.")
+
+    # check if training rows is empty
+    if not training_rows:
+        raise ValueError("training_rows is empty.")
+
+    # 1. initialize parameters
+    weights, bias = initialize_parameters(feature_names, initial_bias)
+    converged = False
+    epochs_run = 0
+
+    # 2. train perceptron
+    while epochs_run < max_epochs:  # repeat up to max_epochs epochs
+
+        updates_this_epoch = 0  # init. 
+
+        for record in training_rows:        # for each training record
+            label = record["diagnosis"]     # get diagnosis
+            desired_output = encode_diagnosis(label)      # get desired output
+            activation = calculate_activation(record, feature_names, weights, bias)  # get activation
+            predicted_output = predict_output(activation)   # get predicted output
+
+            # check if predicted output is incorrect
+            if predicted_output != desired_output:
+                # if not, update weights and bias
+                weights, bias = update_parameters(record, feature_names, weights, bias, desired_output, predicted_output, learning_rate)
+                # count number of updates in this epoch
+                updates_this_epoch+=1
+
+        # 3. record completed epochs
+        epochs_run += 1
+
+        # 4. check if no updates, stop
+        if updates_this_epoch == 0:
+            converged = True
+            break
+        # else repeat next epoch
+    
+    return weights, bias, epochs_run, converged
 
 
 # PART D: EVALUATION AND INTEGRATION
