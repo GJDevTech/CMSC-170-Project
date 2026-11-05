@@ -56,8 +56,42 @@ CATEGORIES = ("low", "medium", "high")
 # Assigned to: GJ
 
 def load_dataset(file_path):
-    # code here
-    pass
+    rows = []
+
+    with open(file_path, "r", newline="") as file:
+        reader = csv.DictReader(file)
+
+        # Get all columns from the CSV
+        fieldnames = reader.fieldnames
+
+        if fieldnames is None:
+            raise ValueError("CSV file has no columns.")
+
+        # Make sure diagnosis exists
+        if "diagnosis" not in fieldnames:
+            raise ValueError("CSV file must contain a diagnosis column.")
+
+        # Use all columns except id and diagnosis as features
+        feature_names = []
+
+        for column in fieldnames:
+            if column != "id" and column != "diagnosis":
+                feature_names.append(column)
+
+        # Read every record
+        for row in reader:
+            record = {}
+
+            # Store diagnosis
+            record["diagnosis"] = row["diagnosis"]
+
+            # Store all 30 numerical features as floats
+            for feature in feature_names:
+                record[feature] = float(row[feature])
+
+            rows.append(record)
+
+    return rows, feature_names
 
 
 def calculate_boundaries(training_rows, feature_names):
