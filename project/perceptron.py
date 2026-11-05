@@ -235,9 +235,29 @@ def train_perceptron(training_rows, feature_names, learning_rate, max_epochs, in
 
 
 def predict_dataset(testing_rows, feature_names, weights, bias):
-    # code here
-    pass
+    predictions = []
 
+    for record in testing_rows:
+        # Calculate activation using trained parameters
+        activation = calculate_activation(
+            record,
+            feature_names,
+            weights,
+            bias
+        )
+
+        # Predict +1 or -1
+        predicted_output = predict_output(activation)
+
+        # Convert prediction back to diagnosis label
+        if predicted_output == 1:
+            prediction = "M"
+        else:
+            prediction = "B"
+
+        predictions.append(prediction)
+
+    return predictions
 
 def evaluate_predictions(testing_rows, predictions):
     # predictions must line up with the testing rows
