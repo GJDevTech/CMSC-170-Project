@@ -122,8 +122,12 @@ def scale_dataset(rows, feature_names, min_max):
 
 
 def encode_diagnosis(label):
-    # code here
-    pass
+    if label == "M":
+        return 1
+    elif label == "B":
+        return -1
+    else:
+        raise ValueError(f"Invalid diagnosis label: {label}")
 
 
 # PART B: PERCEPTRON COMPUTATION
