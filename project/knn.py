@@ -222,8 +222,40 @@ def evaluate_predictions(testing_rows, predictions):
 # Assigned to: Calvin
 
 def main():
-    # code here
-    pass
+    # 1. load training and testing datasets
+    training_rows, features = load_dataset(TRAINING_FILE)
+    testing_rows, test_features = load_dataset(TESTING_FILE)
+
+    # 2. confirm feature columns match
+    if features != test_features:
+        raise ValueError("Training and testing features do not match.")
+
+    # 3. calculate min-max parameters from training data only
+    min_max = calculate_min_max(training_rows, features)
+
+    # 4. scale both datasets with those parameters
+    scaled_training = scale_dataset(training_rows, features, min_max)
+    scaled_testing = scale_dataset(testing_rows, features, min_max)
+
+    # 5. find k nearest neighbors and predict diagnosis
+    predictions = []
+    for record in scaled_testing:
+        neighbors = find_nearest_neighbors(scaled_training, record, features, K, P)
+        prediction = predict_one(neighbors)
+        predictions.append(prediction)
+
+    # 6. evaluate predictions against actual diagnoses
+    results = evaluate_predictions(scaled_testing, predictions)
+
+    # 7. display results
+    print("\nKNN RESULTS")
+    print("-------------------")
+    print("Accuracy:", results["accuracy"])
+    print("Malignant Recall:", results["malignant_recall"])
+    print("TP:", results["TP"])
+    print("TN:", results["TN"])
+    print("FP:", results["FP"])
+    print("FN:", results["FN"])
 
 
 if __name__ == "__main__":
