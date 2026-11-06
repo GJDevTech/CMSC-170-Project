@@ -95,54 +95,23 @@ def load_dataset(file_path):
 
 
 def calculate_boundaries(training_rows, feature_names):
+
+    # 1. calculate lower and upper boundaries here for all features
     boundaries = {}
+    for feature in feature_names:  # for every feature
 
-    for feature in feature_names:
+        values = sorted(record[feature] for record in training_rows)  # collect and sort values
+        n = len(values)  # count values
 
-        # Collect all values for this feature
-        values = []
+        # calculate lower (33rd) and upper boundary (67th) indices using nearest-rank method
+        lower_index = math.ceil(0.33 * n) - 1
+        upper_index = math.ceil(0.67 * n) - 1
 
-        for record in training_rows:
-            values.append(record[feature])
+        boundaries[feature] = {"lower": values[lower_index], "upper": values[upper_index]}  # save boundaries
 
-        # Sort values from smallest to largest
-        values.sort()
-
-        # Calculate 33rd and 67th percentile positions
-        lower_position = (len(values) - 1) * 0.33
-        upper_position = (len(values) - 1) * 0.67
-
-        # Calculate the percentile values using interpolation
-        lower_index = int(lower_position)
-        upper_index = int(upper_position)
-
-        lower_fraction = lower_position - lower_index
-        upper_fraction = upper_position - upper_index
-
-        if lower_index + 1 < len(values):
-            lower_boundary = (
-                values[lower_index]
-                + lower_fraction
-                * (values[lower_index + 1] - values[lower_index])
-            )
-        else:
-            lower_boundary = values[lower_index]
-
-        if upper_index + 1 < len(values):
-            upper_boundary = (
-                values[upper_index]
-                + upper_fraction
-                * (values[upper_index + 1] - values[upper_index])
-            )
-        else:
-            upper_boundary = values[upper_index]
-
-        boundaries[feature] = {
-            "lower": lower_boundary,
-            "upper": upper_boundary
-        }
-
+    # 2. return calculated boundaries
     return boundaries
+
 
 
 def categorize_value(value, lower_boundary, upper_boundary):
@@ -194,7 +163,6 @@ def calculate_priors(training_rows):
     # 1. count records under each class
     b = 0
     m = 0
-
     for record in training_rows:        # for each training record
         diagnosis = record["diagnosis"]   # read diagnosis
 
@@ -210,7 +178,6 @@ def calculate_priors(training_rows):
     # 2. for each class, calculate priors
     priors = {}
     total = len(training_rows)
-
     priors["B"] = b / total
     priors["M"] = m / total
 
@@ -296,6 +263,10 @@ def predict_one(record, feature_names, priors, likelihoods):
 # Assigned to: GJ
 
 def evaluate_predictions(testing_rows, predictions):
+
+    if len(testing_rows) != len(predictions):  # length check
+        raise ValueError("Prediction count mismatch.")
+
     TP = 0
     TN = 0
     FP = 0
@@ -326,7 +297,7 @@ def evaluate_predictions(testing_rows, predictions):
     total = TP + TN + FP + FN
 
     # Calculate accuracy
-    accuracy = (TP + TN) / total
+    accuracy = (TP + TN) / total if total > 0 else 0.0
 
     # Calculate malignant recall
     if TP + FN == 0:
