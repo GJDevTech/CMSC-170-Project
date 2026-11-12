@@ -194,8 +194,60 @@ def generate_bar_graph(models_data, output_dir=FIGURES_DIR):
 # Assigned to: Fae
 
 def generate_confusion_matrix_figures(models_data, output_dir=FIGURES_DIR):
-    # code here
-    pass
+    # save one confusion matrix image per model (malignant = positive class)
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        print("Matplotlib is not installed.")
+        return
+
+    # make sure the output folder exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # rows are the actual class (M, B), columns are the predicted class (M, B)
+    cell_names = [["TP", "FN"], ["FP", "TN"]]
+
+    for model in models_data:
+        TP = models_data[model]["TP"]
+        TN = models_data[model]["TN"]
+        FP = models_data[model]["FP"]
+        FN = models_data[model]["FN"]
+
+        matrix = [[TP, FN], [FP, TN]]
+        max_value = max(TP, TN, FP, FN)
+
+        # draw the matrix, a darker color means a higher count
+        plt.figure(figsize=(5.5, 5))
+        plt.imshow(matrix, cmap="Blues", vmin=0, vmax=max_value)
+
+        # write the cell name and count inside each cell
+        for row in range(2):
+            for col in range(2):
+                value = matrix[row][col]
+
+                # use white text on dark cells so it stays readable
+                if value > max_value / 2:
+                    text_color = "white"
+                else:
+                    text_color = "black"
+
+                plt.text(col, row, f"{cell_names[row][col]}\n{value}", ha="center", va="center", color=text_color, fontsize=18, fontweight="bold")
+
+        # label the axes and add the title
+        plt.xticks([0, 1], ["Predicted M", "Predicted B"], fontsize=10, fontweight="bold")
+        plt.yticks([0, 1], ["Actual M", "Actual B"], fontsize=10, fontweight="bold")
+        plt.title(f"Confusion Matrix: {model}", fontsize=13, fontweight="bold", pad=12)
+        plt.tight_layout()
+
+        # build the file name from the model name (KNN (k=5) -> knn_k5)
+        name = model.lower().replace(" ", "_").replace("(", "").replace(")", "").replace("=", "")
+        file_path = os.path.join(output_dir, "confusion_matrix_" + name + ".png")
+
+        # save the figure
+        plt.savefig(file_path, format="png", dpi=300)
+        plt.close()
+
+        print(f"Successfully saved {file_path}")
 
 
 # PART D: TERMINAL PRINT and MAIN
