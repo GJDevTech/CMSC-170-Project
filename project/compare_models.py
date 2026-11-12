@@ -33,6 +33,10 @@ import sys
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PROJECT_DIR)
 
+import knn
+import naive_bayes
+import perceptron
+
 # constants
 TRAINING_FILE = os.path.join(PROJECT_DIR, "..", "new-dataset", "training.csv")
 TESTING_FILE = os.path.join(PROJECT_DIR, "..", "new-dataset", "testing.csv")
@@ -41,22 +45,85 @@ FIGURES_DIR = os.path.abspath(os.path.join(PROJECT_DIR, "..", "figures"))
 
 
 # PART A: EXECUTION
-# Assigned to: ?
+# Assigned to: Fae
 
 def run_knn():
-    # code here
-    pass
+    # run the full knn pipeline from knn.py and return its results dictionary
+    training_rows, features = knn.load_dataset(TRAINING_FILE)
+    testing_rows, test_features = knn.load_dataset(TESTING_FILE)
 
+    # confirm feature columns match
+    if features != test_features:
+        raise ValueError("Training and testing features do not match.")
+
+    # min-max values come from training data only, then scale both sets
+    min_max = knn.calculate_min_max(training_rows, features)
+    scaled_training = knn.scale_dataset(training_rows, features, min_max)
+    scaled_testing = knn.scale_dataset(testing_rows, features, min_max)
+
+    # predict each testing record from its k nearest neighbors
+    predictions = []
+    for record in scaled_testing:
+        neighbors = knn.find_nearest_neighbors(scaled_training, record, features, knn.K, knn.P)
+        prediction = knn.predict_one(neighbors)
+        predictions.append(prediction)
+
+    # evaluate against the actual diagnoses
+    results = knn.evaluate_predictions(scaled_testing, predictions)
+    return results
 
 def run_naive_bayes():
-    # code here
-    pass
+    # run the full naive bayes pipeline from naive_bayes.py and return its results dictionary
+    training_rows, features = naive_bayes.load_dataset(TRAINING_FILE)
+    testing_rows, test_features = naive_bayes.load_dataset(TESTING_FILE)
+
+    # confirm feature columns match
+    if features != test_features:
+        raise ValueError("Training and testing features do not match.")
+
+    # boundaries come from training data only, then categorize both sets
+    boundaries = naive_bayes.calculate_boundaries(training_rows, features)
+    categorized_training = naive_bayes.categorize_dataset(training_rows, features, boundaries)
+    categorized_testing = naive_bayes.categorize_dataset(testing_rows, features, boundaries)
+
+    # priors and likelihoods come from the categorized training rows
+    priors, class_counts = naive_bayes.calculate_priors(categorized_training)
+    likelihoods = naive_bayes.calculate_likelihoods(categorized_training, features, class_counts)
+
+    # predict each testing record
+    predictions = []
+    for record in categorized_testing:
+        prediction = naive_bayes.predict_one(record, features, priors, likelihoods)
+        predictions.append(prediction)
+
+    # evaluate against the actual diagnoses
+    results = naive_bayes.evaluate_predictions(categorized_testing, predictions)
+    return results
 
 
 def run_perceptron():
-    # code here
-    pass
+    # run the full perceptron pipeline from perceptron.py and return its results dictionary
+    training_rows, features = perceptron.load_dataset(TRAINING_FILE)
+    testing_rows, test_features = perceptron.load_dataset(TESTING_FILE)
 
+    # confirm feature columns match
+    if features != test_features:
+        raise ValueError("Training and testing features do not match.")
+
+    # min-max values come from training data only, then scale both sets
+    min_max = perceptron.calculate_min_max(training_rows, features)
+    scaled_training = perceptron.scale_dataset(training_rows, features, min_max)
+    scaled_testing = perceptron.scale_dataset(testing_rows, features, min_max)
+
+    # train on the scaled training rows only
+    weights, bias, epochs_run, converged = perceptron.train_perceptron(scaled_training, features, perceptron.LEARNING_RATE, perceptron.MAX_EPOCHS, perceptron.INITIAL_BIAS)
+
+    # predict the testing rows with the final weights and bias
+    predictions = perceptron.predict_dataset(scaled_testing, features, weights, bias)
+
+    # evaluate against the actual diagnoses
+    results = perceptron.evaluate_predictions(scaled_testing, predictions)
+    return results
 
 
 # PART B: FIGURE GENERATION - BAR GRAPH
@@ -124,7 +191,7 @@ def generate_bar_graph(models_data, output_dir=FIGURES_DIR):
 
 
 # PART C: FIGURE GENERATION - CONFUSION MATRIX
-# Assigned to: ?
+# Assigned to: Fae
 
 def generate_confusion_matrix_figures(models_data, output_dir=FIGURES_DIR):
     # code here
@@ -132,7 +199,7 @@ def generate_confusion_matrix_figures(models_data, output_dir=FIGURES_DIR):
 
 
 # PART D: TERMINAL PRINT and MAIN
-# Assigned to: ?
+# Assigned to: Calvin
 
 def print_comparison_table(models_data):
     # code here
