@@ -244,7 +244,8 @@ def generate_confusion_matrix_figures(models_data, output_dir=FIGURES_DIR):
         file_path = os.path.join(output_dir, "confusion_matrix_" + name + ".png")
 
         # save the figure
-        plt.savefig(file_path, format="png", dpi=300)
+        with open(file_path, "wb") as f:
+            plt.savefig(f, format="png", dpi=300)
         plt.close()
 
         print(f"Successfully saved {file_path}")
@@ -254,8 +255,19 @@ def generate_confusion_matrix_figures(models_data, output_dir=FIGURES_DIR):
 # Assigned to: Calvin
 
 def print_comparison_table(models_data):
-    # code here
-    pass
+    print("\n========== MODEL COMPARISON RESULTS ==========")
+
+    for model, results in models_data.items():
+        print(f"\n--- {model} ---")
+        print(f"True Positive (TP):  {results['TP']}")
+        print(f"True Negative (TN):  {results['TN']}")
+        print(f"False Positive (FP): {results['FP']}")
+        print(f"False Negative (FN): {results['FN']}")
+        print(f"Accuracy:          {results['accuracy'] * 100:.2f}%")
+        print(f"Malignant Recall:  {results['malignant_recall'] * 100:.2f}%")
+
+    print("\n==============================================")
+
 
 def main():
     print("Running model evaluations...\n")
@@ -273,7 +285,7 @@ def main():
     }
 
     # 3. print comparison table in terminal
-    # print_comparison_table(models_data)
+    print_comparison_table(models_data)
 
     # 4. generate comparison bar graph
     print("\nGenerating performance metrics bar graph...")
