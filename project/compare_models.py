@@ -258,8 +258,32 @@ def print_comparison_table(models_data):
     pass
 
 def main():
-    # code here
-    pass
+    print("Running model evaluations...\n")
+
+    # 1. execute each model pipeline
+    knn_results = run_knn()
+    nb_results = run_naive_bayes()
+    perceptron_results = run_perceptron()
+
+    # 2. collect all evaluation results into a shared dictionary
+    models_data = {
+        "KNN (k=5)": knn_results,
+        "Naive Bayes": nb_results,
+        "Perceptron": perceptron_results,
+    }
+
+    # 3. print comparison table in terminal
+    # print_comparison_table(models_data)
+
+    # 4. generate comparison bar graph
+    print("\nGenerating performance metrics bar graph...")
+    generate_bar_graph(models_data, output_dir=FIGURES_DIR)
+
+    # 5. generate confusion matrix figures for each model
+    print("Generating confusion matrix figures...")
+    generate_confusion_matrix_figures(models_data, output_dir=FIGURES_DIR)
+
+    print("\nModel comparison completed successfully.")
 
 
 if __name__ == "__main__":
