@@ -1,0 +1,630 @@
+:root {
+  --paper: #f6f4ef;
+  --white: #ffffff;
+  --sage: #e8ede6;
+  --forest: #234740;
+  --dark-text: #242a27;
+  --muted-text: #4c5a53;
+  --line: #c7cfc7;
+  --malignant: #a35c55;
+  --testing: #b7c5bb;
+  --light-text: #e7ece5;
+  --font-heading: "Newsreader", Georgia, serif;
+  --font-body: "Inter", Arial, sans-serif;
+}
+
+/* Basic reset */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--dark-text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.625;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 4px;
+}
+
+h1, h2, h3, p, figure {
+  margin: 0;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+/* This is 1216px wide at the approved 1440px desktop size. */
+.container {
+  width: min(1216px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+/* 1. Navigation */
+.site-header {
+  background: var(--paper);
+}
+
+.navigation {
+  min-height: 63px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.site-name,
+.nav-links a {
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-name {
+  color: var(--forest);
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+}
+
+.nav-links a {
+  color: var(--muted-text);
+}
+
+.nav-links a:hover {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+/* 2. Hero */
+.hero {
+  min-height: 680px;
+  display: flex;
+  align-items: flex-start;
+  color: var(--light-text);
+  background-color: #10241f;
+
+  /*
+    Top layers darken the real Figma image for readable text.
+    The gradients also provide a fallback until the image is exported.
+  */
+  background-image:
+  linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.25) 55%,
+    rgba(0, 0, 0, 0.03) 100%
+  ),
+  url("assets/hero-microscopy.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-content {
+  padding-top: 107px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 29px;
+}
+
+.hero-eyebrow {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.hero h1 {
+  max-width: 910px;
+  font-size: 70px;
+  line-height: 78px;
+}
+
+.hero-description {
+  max-width: 785px;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.hero-metadata {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* Shared section styles */
+.section {
+  padding: 82px 0 94px;
+}
+
+.section-white {
+  background: var(--white);
+}
+
+.section-paper {
+  background: var(--paper);
+}
+
+.section-sage {
+  background: var(--sage);
+}
+
+.section-heading {
+  margin-bottom: 40px;
+}
+
+.section-heading h2 {
+  margin-bottom: 14px;
+  font-size: 36px;
+  line-height: 44px;
+}
+
+.section-heading p {
+  max-width: 1100px;
+  color: var(--muted-text);
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.section h3,
+.chart-section h3,
+.matrices-section h3 {
+  font-size: 26px;
+  line-height: 35px;
+  font-weight: 500;
+}
+
+.section p {
+  max-width: 1100px;
+}
+
+.note {
+  color: var(--muted-text);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+.small-heading {
+  color: var(--dark-text);
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 500;
+}
+
+/* 3. Introduction */
+#introduction {
+  padding-top: 76px;
+  padding-bottom: 91px;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 510px minmax(0, 588px);
+  gap: 68px;
+}
+
+.introduction-columns h3 {
+  max-width: 490px;
+}
+
+.text-column {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.text-column p {
+  color: var(--muted-text);
+  line-height: 26px;
+}
+
+/* 4. Dataset and 6. Experiment */
+.statistics {
+  display: flex;
+  align-items: flex-start;
+}
+
+.three-stats {
+  gap: 90px;
+  margin-bottom: 30px;
+}
+
+.two-stats {
+  gap: 110px;
+  margin-bottom: 30px;
+}
+
+.statistic {
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statistic strong {
+  color: var(--forest);
+  font-family: var(--font-heading);
+  font-size: 42px;
+  line-height: 49px;
+  font-weight: 400;
+}
+
+.statistic span {
+  color: var(--muted-text);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+#dataset .rule {
+  margin-bottom: 30px;
+}
+
+#dataset .small-heading {
+  margin-bottom: 22px;
+}
+
+.distribution {
+  display: flex;
+  height: 14px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.distribution span {
+  display: block;
+  height: 100%;
+}
+
+.distribution-benign {
+  background: var(--forest);
+}
+
+.distribution-malignant {
+  background: var(--malignant);
+}
+
+.distribution-test {
+  background: var(--testing);
+}
+
+.distribution-legend {
+  display: grid;
+  grid-template-columns: 62.7% 37.3%;
+  font-size: 13px;
+  line-height: 20px;
+  margin-top: 13px;
+}
+
+.split-legend {
+  grid-template-columns: 75% 25%;
+}
+
+#dataset .note {
+  margin-top: 25px;
+}
+
+.experiment-description {
+  margin-top: 30px;
+  color: var(--muted-text);
+  line-height: 26px;
+}
+
+/* 5. Classification methods */
+#methods .section-heading {
+  margin-bottom: 30px;
+}
+
+.method-row {
+  display: grid;
+  grid-template-columns: 45px minmax(0, 540px);
+  gap: 36px;
+  padding: 25px 0;
+  border-top: 1px solid var(--line);
+}
+
+.method-row:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.method-number {
+  color: var(--muted-text);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.method-row h3 {
+  margin-bottom: 10px;
+}
+
+.method-row p:not(.note) {
+  color: var(--muted-text);
+  line-height: 26px;
+}
+
+.method-row .note {
+  margin-top: 10px;
+}
+
+/* 7. Results: highlighted result */
+#results .section-heading {
+  margin-bottom: 30px;
+}
+
+.featured-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 26px 0;
+}
+
+.result-label {
+  color: var(--forest);
+  margin-bottom: 12px;
+}
+
+.featured-result h2 {
+  font-size: 36px;
+  line-height: 44px;
+  margin-bottom: 12px;
+}
+
+.featured-result p:not(.result-label) {
+  color: var(--muted-text);
+}
+
+.featured-number {
+  min-width: 296px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.featured-number strong {
+  color: var(--forest);
+  font-family: var(--font-heading);
+  font-size: 76px;
+  line-height: 80px;
+  font-weight: 400;
+}
+
+.featured-number span {
+  color: var(--muted-text);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* Results: two 90%–100% dot plots */
+.chart-section {
+  margin-top: 42px;
+}
+
+.chart-section > h3 {
+  margin-bottom: 14px;
+}
+
+.chart-section > .note {
+  margin-bottom: 20px;
+}
+
+.dot-plot {
+  margin-bottom: 16px;
+}
+
+.dot-plot + .dot-plot {
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.dot-plot figcaption {
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.dot-axis,
+.dot-row {
+  display: grid;
+  grid-template-columns: 245px minmax(0, 710px) 176px;
+  column-gap: 25px;
+  align-items: center;
+}
+
+.dot-axis {
+  color: var(--muted-text);
+  font-size: 13px;
+  line-height: 20px;
+  margin-bottom: 5px;
+}
+
+.axis-ticks {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dot-row {
+  min-height: 42px;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.dot-track {
+  height: 37px;
+}
+
+.dot-track svg {
+  display: block;
+  width: 100%;
+  height: 37px;
+  overflow: visible;
+}
+
+.best {
+  color: var(--forest);
+}
+
+.chart-section > .note:last-child {
+  margin-top: 17px;
+}
+
+/* Results: 2 by 2 confusion matrices */
+.matrices-section {
+  margin-top: 42px;
+}
+
+.matrices-section > h3 {
+  margin-bottom: 18px;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 52px;
+}
+
+.confusion-matrix figcaption {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 19px;
+  margin-bottom: 15px;
+}
+
+.confusion-matrix table {
+  border-spacing: 8px;
+  border-collapse: separate;
+  margin: -8px;
+  width: calc(100% + 16px);
+  table-layout: fixed;
+}
+
+.confusion-matrix th {
+  color: var(--muted-text);
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  vertical-align: top;
+}
+
+.confusion-matrix thead th:first-child,
+.confusion-matrix tbody th {
+  width: 80px;
+}
+
+.confusion-matrix thead th {
+  height: 46px;
+}
+
+.confusion-matrix td {
+  background: var(--sage);
+  padding: 12px;
+  vertical-align: top;
+}
+
+.confusion-matrix td small,
+.confusion-matrix td strong {
+  display: block;
+}
+
+.confusion-matrix td small {
+  color: var(--muted-text);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.confusion-matrix td strong {
+  color: var(--forest);
+  font-family: var(--font-heading);
+  font-size: 26px;
+  line-height: 35px;
+  font-weight: 500;
+  margin-top: 7px;
+}
+
+/* 8. Discussion */
+.discussion-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+}
+
+.discussion-columns h3 {
+  margin-bottom: 0;
+}
+
+/* 9. Conclusion and 10. References */
+#conclusion > .container > p {
+  color: var(--muted-text);
+}
+
+#references .section-heading {
+  margin-bottom: 30px;
+}
+
+.references-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 30px;
+  color: var(--muted-text);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.references-list a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+/* Subtle once-per-section scroll animations */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 650ms ease, transform 650ms ease;
+}
+
+.js .reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect users who prefer little or no animation. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+}

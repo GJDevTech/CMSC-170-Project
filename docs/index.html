@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A comparison of KNN, categorical Naïve Bayes, and Perceptron on breast cancer diagnostic data.">
+  <title>Breast Cancer Classification | CMSC 170</title>
+
+  <!-- Figma uses Newsreader for headings and Inter for body text. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- SECTION 1: Navigation -->
+  <header class="site-header">
+    <nav class="container navigation" aria-label="Main navigation">
+      <a class="site-name" href="#top">Breast Cancer Classification</a>
+
+      <div class="nav-links">
+        <a href="#dataset">Dataset</a>
+        <a href="#methods">Methods</a>
+        <a href="#results">Results</a>
+        <a href="#discussion">Discussion</a>
+        <a href="#references">References</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- SECTION 2: Hero -->
+    <!-- The original Figma image belongs at docs/assets/hero-microscopy.png. -->
+    <section class="hero" aria-labelledby="page-title">
+      <div class="container hero-content">
+        <p class="hero-eyebrow">A comparative machine learning study</p>
+
+        <h1 id="page-title">
+          Comparing Classification Algorithms on Breast Cancer Diagnostic Data
+        </h1>
+
+        <p class="hero-description">
+          An evaluation of K-Nearest Neighbors, categorical Naïve Bayes,
+          and a single-layer Perceptron using the Breast Cancer Wisconsin
+          (Diagnostic) dataset.
+        </p>
+
+        <div class="hero-metadata" aria-label="Study metadata">
+          <span>CMSC 170: Introduction to AI machine learning project</span>
+          <span>2026</span>
+          <span>569 observations</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Introduction -->
+    <section class="section section-white" id="introduction">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Introduction</h2>
+          <p>This study compares three supervised classification algorithms on a common, labeled diagnostic dataset.</p>
+        </div>
+
+        <div class="two-columns introduction-columns">
+          <h3>How do different classifiers perform on the same diagnostic data?</h3>
+
+          <div class="text-column">
+            <p>
+              The models predict benign (B) or malignant (M) labels from
+              30 numerical features. All three methods use the same held-out
+              testing records.
+            </p>
+            <p>
+              This is a reproducible educational comparison. The trained
+              models are not validated for clinical decision-making.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Dataset -->
+    <section class="section section-sage" id="dataset">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Dataset</h2>
+          <p>The Breast Cancer Wisconsin (Diagnostic) dataset contains measurements computed from digitized images of breast mass cell nuclei.</p>
+        </div>
+
+        <div class="statistics three-stats" aria-label="Dataset statistics">
+          <div class="statistic">
+            <strong>569</strong>
+            <span>observations</span>
+          </div>
+          <div class="statistic">
+            <strong>30</strong>
+            <span>numerical features</span>
+          </div>
+          <div class="statistic">
+            <strong>2</strong>
+            <span>diagnostic classes</span>
+          </div>
+        </div>
+
+        <hr class="rule">
+        <p class="small-heading">Distribution of diagnosis labels</p>
+
+        <div class="distribution" role="img" aria-label="Benign: 357 records (62.7%). Malignant: 212 records (37.3%).">
+          <span class="distribution-benign" style="width: 62.7%"></span>
+          <span class="distribution-malignant" style="width: 37.3%"></span>
+        </div>
+        <div class="distribution-legend">
+          <span>Benign (B): 357, 62.7%</span>
+          <span>Malignant (M): 212, 37.3%</span>
+        </div>
+
+        <p class="note">Original source: UCI Machine Learning Repository, Breast Cancer Wisconsin (Diagnostic).</p>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Classification Methods -->
+    <section class="section section-paper" id="methods">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Classification Methods</h2>
+          <p>The methods use the same 30 predictor features and the same classification target, but differ in how they learn from training records.</p>
+        </div>
+
+        <div class="methods-list">
+          <article class="method-row">
+            <span class="method-number">01</span>
+            <div>
+              <h3>K-Nearest Neighbors</h3>
+              <p>Classifies a record using a majority vote among its five nearest training records.</p>
+              <p class="note">k = 5; Euclidean distance; training-only Min-Max scaling</p>
+            </div>
+          </article>
+
+          <article class="method-row">
+            <span class="method-number">02</span>
+            <div>
+              <h3>Categorical Naïve Bayes</h3>
+              <p>Discretizes each numeric feature into three categories and estimates class-conditional probabilities.</p>
+              <p class="note">Training-only 33rd and 67th percentile boundaries; Laplace smoothing, α = 1</p>
+            </div>
+          </article>
+
+          <article class="method-row">
+            <span class="method-number">03</span>
+            <div>
+              <h3>Single-layer Perceptron</h3>
+              <p>Learns a linear decision boundary by updating weights when a training example is misclassified.</p>
+              <p class="note">Learning rate = 0.1; maximum 100 epochs; initial bias = 0.5</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: Experimental Setup -->
+    <section class="section section-white" id="experiment">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Experimental Setup</h2>
+          <p>All models were evaluated against the same held-out testing set. Scaling and discretization boundaries were derived only from training data.</p>
+        </div>
+
+        <div class="statistics two-stats" aria-label="Training and testing records">
+          <div class="statistic">
+            <strong>427</strong>
+            <span>training records</span>
+          </div>
+          <div class="statistic">
+            <strong>142</strong>
+            <span>testing records</span>
+          </div>
+        </div>
+
+        <div class="distribution" role="img" aria-label="Training: 427 records, approximately 75%. Testing: 142 records, approximately 25%.">
+          <span class="distribution-benign" style="width: 75%"></span>
+          <span class="distribution-test" style="width: 25%"></span>
+        </div>
+        <div class="distribution-legend split-legend">
+          <span>Training: 427 records (75%)</span>
+          <span>Testing: 142 records (25%)</span>
+        </div>
+
+        <p class="experiment-description">
+          The 569 observations were separated using a stratified 75/25 train-test
+          split. A fixed random seed (67) was used when preparing the split to
+          support reproducibility. Malignant (M) is the positive class;
+          evaluation reports accuracy, malignant recall, and confusion matrices.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 7: Results -->
+    <section class="section section-paper" id="results">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Results</h2>
+          <p>Test-set performance of the three models.</p>
+        </div>
+
+        <div class="featured-result">
+          <div>
+            <p class="small-heading result-label">Highest test accuracy</p>
+            <h2>K-Nearest Neighbors</h2>
+            <p>140 of 142 held-out test records correctly classified.</p>
+          </div>
+          <div class="featured-number">
+            <strong>98.59%</strong>
+            <span>Test accuracy</span>
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <h3>Performance comparison</h3>
+          <p class="note">Accuracy and malignant recall, measured on the same 142 test records.</p>
+
+          <!-- Each plot has visible text values even when JavaScript is disabled. -->
+          <figure class="dot-plot">
+            <figcaption>Accuracy</figcaption>
+            <div class="dot-axis" aria-hidden="true">
+              <span></span>
+              <div class="axis-ticks"><span>90%</span><span>92%</span><span>94%</span><span>96%</span><span>98%</span><span>100%</span></div>
+              <span>Score</span>
+            </div>
+            <div class="dot-row">
+              <span class="model-name best">K-Nearest Neighbors</span>
+              <div class="dot-track" data-score="98.59"></div>
+              <span class="model-score best">98.59%</span>
+            </div>
+            <div class="dot-row">
+              <span class="model-name">Categorical Naïve Bayes</span>
+              <div class="dot-track" data-score="94.37"></div>
+              <span class="model-score">94.37%</span>
+            </div>
+            <div class="dot-row">
+              <span class="model-name">Single-layer Perceptron</span>
+              <div class="dot-track" data-score="97.89"></div>
+              <span class="model-score">97.89%</span>
+            </div>
+          </figure>
+
+          <figure class="dot-plot">
+            <figcaption>Malignant recall</figcaption>
+            <div class="dot-axis" aria-hidden="true">
+              <span></span>
+              <div class="axis-ticks"><span>90%</span><span>92%</span><span>94%</span><span>96%</span><span>98%</span><span>100%</span></div>
+              <span>Score</span>
+            </div>
+            <div class="dot-row">
+              <span class="model-name best">K-Nearest Neighbors</span>
+              <div class="dot-track" data-score="98.11"></div>
+              <span class="model-score best">98.11%</span>
+            </div>
+            <div class="dot-row">
+              <span class="model-name">Categorical Naïve Bayes</span>
+              <div class="dot-track" data-score="94.34"></div>
+              <span class="model-score">94.34%</span>
+            </div>
+            <div class="dot-row">
+              <span class="model-name">Single-layer Perceptron</span>
+              <div class="dot-track" data-score="98.11"></div>
+              <span class="model-score">98.11%</span>
+            </div>
+          </figure>
+
+          <p class="note">Scale note: positions show scores within 90–100%, not 0–100%. KNN has the highest accuracy; KNN and Perceptron tie on malignant recall.</p>
+        </div>
+
+        <p class="note">Malignant recall = TP/(TP + FN). The Perceptron reached the 100-epoch limit without convergence.</p>
+
+        <div class="matrices-section">
+          <h3>Confusion matrices</h3>
+          <div class="matrix-grid">
+            <figure class="confusion-matrix">
+              <figcaption>KNN (k=5)</figcaption>
+              <table>
+                <thead><tr><th scope="col">Actual / predicted</th><th scope="col">Predicted M</th><th scope="col">Predicted B</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Actual M</th><td><small>TP</small><strong>52</strong></td><td><small>FN</small><strong>1</strong></td></tr>
+                  <tr><th scope="row">Actual B</th><td><small>FP</small><strong>1</strong></td><td><small>TN</small><strong>88</strong></td></tr>
+                </tbody>
+              </table>
+            </figure>
+
+            <figure class="confusion-matrix">
+              <figcaption>Naïve Bayes</figcaption>
+              <table>
+                <thead><tr><th scope="col">Actual / predicted</th><th scope="col">Predicted M</th><th scope="col">Predicted B</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Actual M</th><td><small>TP</small><strong>50</strong></td><td><small>FN</small><strong>3</strong></td></tr>
+                  <tr><th scope="row">Actual B</th><td><small>FP</small><strong>5</strong></td><td><small>TN</small><strong>84</strong></td></tr>
+                </tbody>
+              </table>
+            </figure>
+
+            <figure class="confusion-matrix">
+              <figcaption>Perceptron</figcaption>
+              <table>
+                <thead><tr><th scope="col">Actual / predicted</th><th scope="col">Predicted M</th><th scope="col">Predicted B</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Actual M</th><td><small>TP</small><strong>52</strong></td><td><small>FN</small><strong>1</strong></td></tr>
+                  <tr><th scope="row">Actual B</th><td><small>FP</small><strong>2</strong></td><td><small>TN</small><strong>87</strong></td></tr>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: Discussion -->
+    <section class="section section-white" id="discussion">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Discussion</h2>
+          <p>K-Nearest Neighbors achieved the highest test accuracy, while KNN and Perceptron obtained equal malignant recall on this split.</p>
+        </div>
+
+        <div class="two-columns discussion-columns">
+          <div class="text-column">
+            <h3>Interpretation</h3>
+            <p>KNN correctly classified 140 of the 142 test records. Perceptron correctly classified 139, while categorical Naïve Bayes correctly classified 134. Results reflect this particular data split and configuration.</p>
+          </div>
+          <div class="text-column">
+            <h3>Limitations</h3>
+            <p>Categorical discretization reduces numerical precision. The Perceptron did not converge within 100 epochs. No clinical validation, external cohort testing, or diagnostic deployment is claimed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: Conclusion -->
+    <section class="section section-paper" id="conclusion">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>Conclusion</h2>
+          <p>The models produced different results under a common evaluation procedure. On this test split, KNN performed best in overall accuracy.</p>
+        </div>
+        <p>These findings illustrate differences between methods, not evidence that any model is suitable for medical diagnosis.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 10: References -->
+    <section class="section section-sage" id="references">
+      <div class="container reveal">
+        <div class="section-heading">
+          <h2>References and Credits</h2>
+          <p>Project sources, contributors, implementation repository, and required disclosures.</p>
+        </div>
+
+        <hr class="rule">
+        <div class="references-list">
+          <p>Dataset: UCI Machine Learning Repository, Breast Cancer Wisconsin (Diagnostic).<br>
+            <a href="https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic" target="_blank" rel="noopener noreferrer">https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic</a>
+          </p>
+          <p>Project team: Jericho, GJ, Fae, and Calvin.</p>
+          <p>Implementation repository: <a href="https://github.com/GJDevTech/CMSC-170-Project" target="_blank" rel="noopener noreferrer">CMSC-170-Project on GitHub</a>.</p>
+          <p>Hero illustration: generated microscopy-inspired imagery for visual context only. It is not a specimen photograph from the Wisconsin Diagnostic dataset.</p>
+          <!-- Add the team's required AI assistance and source disclosures here before final submission. -->
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
