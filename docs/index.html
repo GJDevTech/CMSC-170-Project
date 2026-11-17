@@ -10,31 +10,44 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#f5f6f1">
+  <link rel="icon" href="assets/hero-microscopy.png" type="image/png">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
   <!-- SECTION 1: Navigation -->
   <header class="site-header">
     <nav class="container navigation" aria-label="Main navigation">
-      <a class="site-name" href="#top">Breast Cancer Classification</a>
+      <a class="site-name" href="#top" aria-label="Breast Cancer Classification home">
+        <span class="site-name-copy">
+          <span class="site-name-title">Breast Cancer Classification</span>
+          <small>CMSC 170 Research Project</small>
+        </span>
+      </a>
 
-      <div class="nav-links">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation">
+        <span></span><span></span>
+      </button>
+      <div class="nav-links" id="primary-navigation">
         <a href="#dataset">Dataset</a>
         <a href="#methods">Methods</a>
         <a href="#results">Results</a>
         <a href="#discussion">Discussion</a>
+        <a href="#team">Team</a>
         <a href="#references">References</a>
       </div>
     </nav>
   </header>
 
-  <main id="top">
+  <main id="main-content">
     <!-- SECTION 2: Hero -->
     <!-- The original Figma image belongs at docs/assets/hero-microscopy.png. -->
-    <section class="hero" aria-labelledby="page-title">
+    <section class="hero" id="top" aria-labelledby="page-title">
       <div class="container hero-content">
-        <p class="hero-eyebrow">A comparative machine learning study</p>
+        <p class="hero-eyebrow"><span class="eyebrow-line"></span> A comparative machine learning study</p>
 
         <h1 id="page-title">
           Comparing Classification Algorithms on Breast Cancer Diagnostic Data
@@ -46,6 +59,7 @@
           (Diagnostic) dataset.
         </p>
 
+        <a class="hero-cta" href="#results">Explore the findings <span aria-hidden="true">↓</span></a>
         <div class="hero-metadata" aria-label="Study metadata">
           <span>CMSC 170: Introduction to AI machine learning project</span>
           <span>2026</span>
@@ -154,6 +168,37 @@
               <p class="note">Learning rate = 0.1; maximum 100 epochs; initial bias = 0.5</p>
             </div>
           </article>
+        </div>
+
+        <div class="method-explorer" aria-labelledby="explorer-title">
+          <div class="explorer-heading">
+            <p class="small-heading">INTERACTIVE GUIDE</p>
+            <h3 id="explorer-title">How does each classifier decide?</h3>
+            <p class="note">Select a model to explore the core idea behind its prediction process.</p>
+          </div>
+          <div class="explorer-tabs" role="tablist" aria-label="Classification model explainer">
+            <button class="explorer-tab active" id="tab-knn" type="button" role="tab" aria-selected="true" aria-controls="panel-knn" data-model="knn">KNN</button>
+            <button class="explorer-tab" id="tab-bayes" type="button" role="tab" aria-selected="false" aria-controls="panel-bayes" data-model="bayes" tabindex="-1">Naïve Bayes</button>
+            <button class="explorer-tab" id="tab-perceptron" type="button" role="tab" aria-selected="false" aria-controls="panel-perceptron" data-model="perceptron" tabindex="-1">Perceptron</button>
+          </div>
+          <div class="explorer-panel" id="panel-knn" role="tabpanel" aria-labelledby="tab-knn">
+            <span class="explorer-step">01 / NEIGHBORHOOD VOTING</span>
+            <h4>Find the closest examples, then take a vote.</h4>
+            <p>KNN compares a new record with the training records using Euclidean distance. In this project, the five closest records vote on the predicted class. The majority label becomes the prediction.</p>
+            <div class="explorer-flow"><span>New record</span><b>→</b><span>5 nearest records</span><b>→</b><span>Majority vote</span><b>→</b><span>Class</span></div>
+          </div>
+          <div class="explorer-panel" id="panel-bayes" role="tabpanel" aria-labelledby="tab-bayes" hidden>
+            <span class="explorer-step">02 / PROBABILITY</span>
+            <h4>Estimate which class is most probable given the features.</h4>
+            <p>Each numerical feature is discretized into one of three categories. Naïve Bayes combines the class prior and the feature likelihoods, treating features as conditionally independent. Laplace smoothing helps avoid zero probabilities.</p>
+            <div class="explorer-flow"><span>Feature categories</span><b>→</b><span>Class probabilities</span><b>→</b><span>Compare scores</span><b>→</b><span>Class</span></div>
+          </div>
+          <div class="explorer-panel" id="panel-perceptron" role="tabpanel" aria-labelledby="tab-perceptron" hidden>
+            <span class="explorer-step">03 / LINEAR DECISION</span>
+            <h4>Learn weights that separate the two classes.</h4>
+            <p>The Perceptron calculates a weighted sum of the input features and applies a decision rule. When a training example is misclassified, it updates its weights and bias to improve later predictions.</p>
+            <div class="explorer-flow"><span>Input features</span><b>→</b><span>Weighted sum</span><b>→</b><span>Decision rule</span><b>→</b><span>Class</span></div>
+          </div>
         </div>
       </div>
     </section>
@@ -353,18 +398,33 @@
           <p>Project sources, contributors, implementation repository, and required disclosures.</p>
         </div>
 
-        <hr class="rule">
+        <div class="team-section" id="team">
+          <div class="team-heading"><p class="small-heading">THE PEOPLE BEHIND THE PROJECT</p><h3>Project Team</h3></div>
+          <div class="team-grid">
+            <article class="team-card"><span>01</span><h4>Calvin Gennel M. Avanzado</h4><p>Project member</p></article>
+            <article class="team-card"><span>02</span><h4>Gerizim Josh L. Colosaga</h4><p>Project member</p></article>
+            <article class="team-card"><span>03</span><h4>Jericho Russ A. Gabion</h4><p>Project member</p></article>
+            <article class="team-card"><span>04</span><h4>Yumie Zoe P. Ramos</h4><p>Project member</p></article>
+          </div>
+        </div>
         <div class="references-list">
+          <h3>References and Project Links</h3>
           <p>Dataset: UCI Machine Learning Repository, Breast Cancer Wisconsin (Diagnostic).<br>
-            <a href="https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic" target="_blank" rel="noopener noreferrer">https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic</a>
+            <a href="https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic" target="_blank" rel="noopener noreferrer">UCI Machine Learning Repository — Breast Cancer Wisconsin (Diagnostic)</a>
           </p>
-          <p>Project team: Jericho, GJ, Fae, and Calvin.</p>
-          <p>Implementation repository: <a href="https://github.com/GJDevTech/CMSC-170-Project" target="_blank" rel="noopener noreferrer">CMSC-170-Project on GitHub</a>.</p>
+          <p>Dataset copy used in the project: <a href="https://www.kaggle.com/datasets/yasserh/breast-cancer-dataset" target="_blank" rel="noopener noreferrer">Breast Cancer Dataset by M. Yasser H. on Kaggle</a>.</p>
+          <p>Implementation repository: <a class="source-button" href="https://github.com/GJDevTech/CMSC-170-Project" target="_blank" rel="noopener noreferrer">View Source Code <span aria-hidden="true">↗</span></a></p>
           <p>Hero illustration: generated microscopy-inspired imagery for visual context only. It is not a specimen photograph from the Wisconsin Diagnostic dataset.</p>
-          <!-- Add the team's required AI assistance and source disclosures here before final submission. -->
         </div>
       </div>
     </section>
   </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>CMSC 170 · Introduction to Artificial Intelligence</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+  <script>document.documentElement.classList.add('has-js');</script>
 </body>
 </html>
