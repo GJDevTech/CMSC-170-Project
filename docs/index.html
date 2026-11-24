@@ -32,6 +32,7 @@
         <span></span><span></span>
       </button>
       <div class="nav-links" id="primary-navigation">
+        <a href="#introduction">Introduction</a>
         <a href="#dataset">Dataset</a>
         <a href="#methods">Methods</a>
         <a href="#results">Results</a>
@@ -76,21 +77,50 @@
           <p>This study compares three supervised classification algorithms on a common, labeled diagnostic dataset.</p>
         </div>
 
-        <div class="two-columns introduction-columns">
-          <h3>How do different classifiers perform on the same diagnostic data?</h3>
-
-          <div class="text-column">
-            <p>
-              The models predict benign (B) or malignant (M) labels from
-              30 numerical features. All three methods use the same held-out
-              testing records.
-            </p>
-            <p>
-              This is a reproducible educational comparison. The trained
-              models are not validated for clinical decision-making.
-            </p>
+        <section class="intro-motivation" id="motivation" aria-labelledby="motivation-title">
+          <h3 id="motivation-title">Motivation</h3>
+          <figure class="intro-impact">
+            <div class="intro-impact-grid" aria-hidden="true">
+              <div class="intro-impact-stat">
+                <strong>2.3 million</strong>
+                <span>New cases worldwide in 2022</span>
+              </div>
+              <div class="intro-impact-stat">
+                <strong>666,000</strong>
+                <span>Deaths worldwide in 2022</span>
+              </div>
+            </div>
+            <figcaption>Breast cancer is the most frequently diagnosed cancer among women, with approximately 2.3 million new cases and 666,000 deaths worldwide in 2022 (Bray et al., 2024).</figcaption>
+          </figure>
+          <div class="intro-reading-grid">
+            <p>Early detection improves survival, yet disagreement among pathologists interpreting breast biopsy specimens remains a documented challenge (Elmore et al., 2015).</p>
+            <p>Computational classification offers a way to systematically evaluate measurable characteristics of breast masses. Comparing multiple classifiers on these measurements allows us to understand their strengths, limitations, and types of classification errors. Implementing each classifier from scratch also provides insight into how different algorithms arrive at their predictions.</p>
           </div>
-        </div>
+        </section>
+
+        <section class="intro-problem" id="problem-statement" aria-labelledby="problem-statement-title">
+          <div class="intro-problem-band">
+            <h3 id="problem-statement-title">Problem Statement</h3>
+            <p class="intro-problem-hook"><strong>A classifier can achieve high accuracy and still miss the cases <em>that matter most.</em></strong></p>
+          </div>
+          <p class="intro-problem-context">In breast cancer diagnosis, classification errors do not carry equal consequences. Accuracy alone can obscure false negatives, making malignant recall an important complementary evaluation metric (Hicks et al., 2022).</p>
+          <div class="intro-reading-grid intro-rationale">
+            <div>
+              <h4>Why this dataset?</h4>
+              <p>The Breast Cancer Wisconsin (Diagnostic) dataset was selected because it provides 30 numerical features extracted from digitized images of breast mass samples, alongside established benign and malignant diagnosis labels (Wolberg et al., 1995). These characteristics make it suitable for comparing supervised classification methods.</p>
+            </div>
+            <div>
+              <h4>Why these methods?</h4>
+              <p>This project examines three fundamentally different approaches: K-Nearest Neighbors, which classifies based on similarity; Categorical Naïve Bayes, which relies on probability; and Perceptron, which learns a linear decision boundary.</p>
+            </div>
+          </div>
+          <div class="intro-method-strip" aria-hidden="true">
+            <div><strong>KNN</strong><span>Similarity-based</span></div>
+            <div><strong>Naïve Bayes</strong><span>Probability-based</span></div>
+            <div><strong>Perceptron</strong><span>Linear learning-based</span></div>
+          </div>
+          <p class="intro-research-aim">Using a shared dataset split, training-only preprocessing, and consistent evaluation metrics, this project investigates <strong>which approach achieves the strongest classification performance while minimizing missed malignant cases.</strong></p>
+        </section>
       </div>
     </section>
 
@@ -384,9 +414,23 @@
       <div class="container reveal">
         <div class="section-heading">
           <h2>Conclusion</h2>
-          <p>The models produced different results under a common evaluation procedure. On this test split, KNN performed best in overall accuracy.</p>
         </div>
-        <p>These findings illustrate differences between methods, not evidence that any model is suitable for medical diagnosis.</p>
+        <div class="conclusion-editorial">
+          <div class="conclusion-reading-grid">
+            <div class="conclusion-finding">
+              <h3>The findings</h3>
+              <p>Among the three classification approaches, K-Nearest Neighbors demonstrated the strongest overall performance under the established experimental conditions. Its advantage over Perceptron came from fewer false positives rather than better detection of malignant cases, highlighting why overall accuracy alone is insufficient when evaluating diagnostic classifiers.</p>
+            </div>
+            <div class="conclusion-implication">
+              <h3>The implications</h3>
+              <p>More importantly, the study demonstrates that fundamentally different classification approaches can achieve similarly strong predictive performance while producing different patterns of error.</p>
+            </div>
+          </div>
+          <div class="conclusion-statement">
+            <p>Selecting an appropriate classifier therefore requires considering not only how often it predicts correctly, but also <em>which types of mistakes it makes.</em></p>
+          </div>
+          <p class="conclusion-final">Although limited to the selected dataset and experimental conditions, this comparison emphasizes the importance of consistent evaluation procedures and task-relevant metrics when assessing machine learning methods.</p>
+        </div>
       </div>
     </section>
 
@@ -409,11 +453,22 @@
         </div>
         <div class="references-list">
           <h3>References and Project Links</h3>
-          <p>Dataset: UCI Machine Learning Repository, Breast Cancer Wisconsin (Diagnostic).<br>
+          <p>Bray, F., Laversanne, M., Sung, H., Ferlay, J., Siegel, R. L., Soerjomataram, I., &amp; Jemal, A. (2024). Global cancer statistics 2022: GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countries. <em>CA: A Cancer Journal for Clinicians, 74</em>(3), 229–263.<br>
+            <a href="https://doi.org/10.3322/caac.21834" target="_blank" rel="noopener noreferrer">https://doi.org/10.3322/caac.21834</a>
+          </p>
+          <p>Elmore, J. G., Longton, G. M., Carney, P. A., Geller, B. M., Onega, T., Tosteson, A. N. A., Nelson, H. D., Pepe, M. S., Allison, K. H., Schnitt, S. J., O'Malley, F. P., &amp; Weaver, D. L. (2015). Diagnostic concordance among pathologists interpreting breast biopsy specimens. <em>JAMA, 313</em>(11), 1122–1132.<br>
+            <a href="https://doi.org/10.1001/jama.2015.1405" target="_blank" rel="noopener noreferrer">https://doi.org/10.1001/jama.2015.1405</a>
+          </p>
+          <p>Hicks, S. A., Strümke, I., Thambawita, V., Riegler, M. A., Halvorsen, P., &amp; Parasa, S. (2022). On evaluation metrics for medical applications of artificial intelligence. <em>Scientific Reports, 12</em>, 5979.<br>
+            <a href="https://doi.org/10.1038/s41598-022-09954-8" target="_blank" rel="noopener noreferrer">https://doi.org/10.1038/s41598-022-09954-8</a>
+          </p>
+          <p>Wolberg, W., Mangasarian, O., Street, N., &amp; Street, W. (1995). <em>Breast Cancer Wisconsin (Diagnostic)</em> [Dataset]. UCI Machine Learning Repository.<br>
+            <a href="https://doi.org/10.24432/C5DW2B" target="_blank" rel="noopener noreferrer">https://doi.org/10.24432/C5DW2B</a><br>
             <a href="https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic" target="_blank" rel="noopener noreferrer">UCI Machine Learning Repository — Breast Cancer Wisconsin (Diagnostic)</a>
           </p>
           <p>Dataset copy used in the project: <a href="https://www.kaggle.com/datasets/yasserh/breast-cancer-dataset" target="_blank" rel="noopener noreferrer">Breast Cancer Dataset by M. Yasser H. on Kaggle</a>.</p>
           <p>Implementation repository: <a class="source-button" href="https://github.com/GJDevTech/CMSC-170-Project" target="_blank" rel="noopener noreferrer">View Source Code <span aria-hidden="true">↗</span></a></p>
+          <p>AI assistance disclosure: <a href="https://docs.google.com/document/d/1eMhfK9PsofH00MmaK9EzCPet24s1iLQDrWhzQjRib4s/edit?usp=sharing" target="_blank" rel="noopener noreferrer">AI Prompts Used in Converting the Figma Design into the Project Website</a>.</p>
           <p>Hero illustration: generated microscopy-inspired imagery for visual context only. It is not a specimen photograph from the Wisconsin Diagnostic dataset.</p>
         </div>
       </div>
